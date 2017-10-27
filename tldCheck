@@ -15,23 +15,6 @@ O='\033[0;33m'
 B='\033[0;34m'
 NC='\033[0m'
 
-wget https://publicsuffix.org/list/public_suffix_list.dat
-cat public_suffix_list.dat|egrep -v '//'|sort -u >> tlds.txt
-sed -i 1,62d tlds.txt
-
-spin='-\|/'
-
-spinner() {
-                printf "${G}[-]${NC} Checking DNS entries...\n "
-                i=0
-                while kill -0 $pid 2>/dev/null
-                do
-                        i=$(( (i+1) %4 ))
-                        printf "\r${spin:$i:1}"
-                        sleep .1
-                done
-}
-
 banner() {
         clear
 	count=`cat tlds.txt|wc -l`
@@ -49,14 +32,27 @@ banner() {
 	printf "${G}[+]${NC}  - checking $count tld's\n"
 }
 
+checkTLDs() {
+	if [ -e tlds.txt ]
+	then
+		printf "${G}[+]${NC}  - tld file ok.\n"
+	else
+		printf "${G}[+]${NC}  - tld missing, grabbing it now.\n"
+		wget https://publicsuffix.org/list/public_suffix_list.dat
+		cat public_suffix_list.dat|egrep -v '//'|sort -u >> tlds.txt
+		sed -i 1,62d tlds.txt
+		rm -f public_suffix_list.dat
+	fi
+}
 
 	banner
+	checkTLDs
 	for i in `cat tlds.txt`
 		do 
 			printf "${G}[+]${NC} Testing $1.$i\n"
 			output=`dig $1.$i|grep $1.$i|grep -v ';'`
 			if [[ $output ]]; then
-				printf "${O}[+]${NC} - DNS Records foundMatch on $1.$i - checking for content.\n"
+				printf "${O}[+]${NC} - DNS Records found for $1.$i - checking for content.\n"
 				echo "$1.$i" >> $hitlog
 				pageOutput=`curl -s $1.$i|grep $1.$i` 
 				if [[ $pageOutput ]]; then
