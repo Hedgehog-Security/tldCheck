@@ -101,7 +101,7 @@ checkTLDs() {
                                        printf "${G}[-]${NC} - No content found. Moving on.\n"
 				fi
 			else
-				printf " - ${G}[OK]${NC} \n"
+				printf "							${G}[OK]${NC} \n"
 			fi
 		done
 	printf "${G}[=]${NC} All done.\n"
