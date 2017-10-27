@@ -57,49 +57,44 @@ checkTLDs() {
 				pageOutput=`curl -s $1.$i|grep $1.$i` 
 				if [[ $pageOutput ]]; then
 					brandCheck=`curl -s $1.$i|grep "$brand"`
+					printf "\n${G}[-]${NC} - Checking for http data."
 					if [[ $brandCheck ]]; then
-						printf "${R}[!]${NC} - Manual review required on http://$1.$i - possible content found.\n"
+						printf "							${O}[PRESENT]${NC}\n"
 						echo "$1.$i" >> $reviewlog
 					else
-                                                printf "${G}[-]${NC} - No content found.\n"
+                                                printf "							${G}[OK]${NC}\n"
 						echo "$1.$i" >> $brandhit
 					fi
                                         brandCheck=`curl -k -s https://$1.$i|grep "$brand"`
                                         if [[ $brandCheck ]]; then
-                                                printf "${R}[!]${NC} - Manual review required on https://$1.$i - possible content found.\n"
+                                                printf "							${O}[PRESENT]${NC}\n"
                                                 echo "$1.$i" >> $reviewlog
                                         else
-                                                printf "${G}[-]${NC} - No content found.\n"
+                                                printf "							${G}[OK]${NC}\n"
                                                 echo "$1.$i" >> $brandhit
                                         fi
                                 fi
 				printf "${O}[-]${NC} - Prepending with www and re-checking.\n"
 				output=`dig www.$1.$i|grep www.$1.$i|grep -v ';'`
-                        	if [[ $output ]]; then
-                                	printf "${R}[!]${NC} - Match on www.$1.$i - checking for content.\n"
-                                	echo "www.$1.$i" >> $hitlog
-                                	pageOutput=`curl -s www.$1.$i|grep www.$1.$i` 
-                                	if [[ $pageOutput ]]; then
-						brandCheck=`curl -s $1.$i|grep "$brand"`
-                                        	if [[ $brandCheck ]]; then
-                                                	printf "${R}[!]${NC} - Manual review required on http://www.$1.$i - possible content found.\n"
-                                                	echo "$1.$i" >> $reviewlog
-                                        	else
-                                                printf "${G}[-]${NC} - No content found.\n"
-                                                	echo "$1.$i" >> $brandhit
-						fi
-					fi 
-                                        brandCheck=`curl -k -s https://$1.$i|grep "$brand"`
+				if [[ $pageOutput ]]; then
+					brandCheck=`curl -s www.$1.$i|grep "$brand"`
+					printf "\n${G}[-]${NC} - Checking for http data using www."
+					if [[ $brandCheck ]]; then
+						printf "							${O}[PRESENT]${NC}\n"
+						echo "www.$1.$i" >> $reviewlog
+					else
+                                                printf "							${G}[OK]${NC}\n"
+						echo "www.$1.$i" >> $brandhit
+					fi
+                                        brandCheck=`curl -k -s https://www.$1.$i|grep "$brand"`
                                         if [[ $brandCheck ]]; then
-                                                printf "${R}[!]${NC} - Manual review required on https://www.$1.$i - possible content found.\n"
-                                                echo "$1.$i" >> $reviewlog
+                                                printf "							${O}[PRESENT]${NC}\n"
+                                                echo "www.$1.$i" >> $reviewlog
                                         else
-                                                printf "${G}[-]${NC} - No content found.\n"
-                                                echo "$1.$i" >> $brandhit
+                                                printf "							${G}[OK]${NC}\n"
+                                                echo "www.$1.$i" >> $brandhit
                                         fi
-				else
-                                       printf "${G}[-]${NC} - No content found. Moving on.\n"
-				fi
+                                fi
 			else
 				printf "							${G}[OK]${NC} \n"
 			fi
