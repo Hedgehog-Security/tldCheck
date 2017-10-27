@@ -53,25 +53,25 @@ checkTLDs() {
 			output=`dig $1.$i|grep $1.$i|grep -v ';'`
 			if [[ $output ]]; then
 				printf "\n${O}[+]${NC} - DNS Records found for $1.$i - checking for content.\n"
-				echo "$1.$i" >> $hitlog
+				echo "$1.$i" >> $domain-$hitlog
 				pageOutput=`curl -s $1.$i|grep $1.$i` 
 				if [[ $pageOutput ]]; then
 					brandCheck=`curl -s $1.$i|grep "$brand"`
 					printf "\n${G}[-]${NC} - Checking for http data."
 					if [[ $brandCheck ]]; then
 						printf "							${O}[PRESENT]${NC}\n"
-						echo "$1.$i" >> $reviewlog
+						echo "$1.$i" >> $domain-$reviewlog
 					else
                                                 printf "							${G}[OK]${NC}\n"
-						echo "$1.$i" >> $brandhit
+						echo "$1.$i" >> $domain-$brandhit
 					fi
                                         brandCheck=`curl -k -s https://$1.$i|grep "$brand"`
                                         if [[ $brandCheck ]]; then
                                                 printf "							${O}[PRESENT]${NC}\n"
-                                                echo "$1.$i" >> $reviewlog
+                                                echo "$1.$i" >> $domain-$reviewlog
                                         else
                                                 printf "							${G}[OK]${NC}\n"
-                                                echo "$1.$i" >> $brandhit
+                                                echo "$1.$i" >> $domain-$brandhit
                                         fi
                                 fi
 				printf "${O}[-]${NC} - Prepending with www and re-checking.\n"
@@ -81,18 +81,18 @@ checkTLDs() {
 					printf "\n${G}[-]${NC} - Checking for http data using www."
 					if [[ $brandCheck ]]; then
 						printf "							${O}[PRESENT]${NC}\n"
-						echo "www.$1.$i" >> $reviewlog
+						echo "www.$1.$i" >> $domain-$reviewlog
 					else
                                                 printf "							${G}[OK]${NC}\n"
-						echo "www.$1.$i" >> $brandhit
+						echo "www.$1.$i" >> $domain-$brandhit
 					fi
                                         brandCheck=`curl -k -s https://www.$1.$i|grep "$brand"`
                                         if [[ $brandCheck ]]; then
                                                 printf "							${O}[PRESENT]${NC}\n"
-                                                echo "www.$1.$i" >> $reviewlog
+                                                echo "www.$1.$i" >> $domain-$reviewlog
                                         else
                                                 printf "							${G}[OK]${NC}\n"
-                                                echo "www.$1.$i" >> $brandhit
+                                                echo "www.$1.$i" >> $domain-$brandhit
                                         fi
                                 fi
 			else
