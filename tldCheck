@@ -17,6 +17,7 @@ NC='\033[0m'
 
 wget https://publicsuffix.org/list/public_suffix_list.dat
 cat public_suffix_list.dat|egrep -v '//'|sort -u >> tlds.txt
+sed -i 1,62d tlds.txt
 
 spin='-\|/'
 
