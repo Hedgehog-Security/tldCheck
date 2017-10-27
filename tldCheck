@@ -49,10 +49,10 @@ checkTLDs() {
 	checkTLDs
 	for i in `cat tlds.txt`
 		do 
-			printf "${G}[+]${NC} Testing $1.$i\n"
+			printf "${G}[+]${NC} Testing $1.$i"
 			output=`dig $1.$i|grep $1.$i|grep -v ';'`
 			if [[ $output ]]; then
-				printf "${O}[+]${NC} - DNS Records found for $1.$i - checking for content.\n"
+				printf "\n${O}[+]${NC} - DNS Records found for $1.$i - checking for content.\n"
 				echo "$1.$i" >> $hitlog
 				pageOutput=`curl -s $1.$i|grep $1.$i` 
 				if [[ $pageOutput ]]; then
@@ -100,6 +100,8 @@ checkTLDs() {
 				else
                                        printf "${G}[-]${NC} - No content found. Moving on.\n"
 				fi
+			else
+				printf " - ${G}[OK]${NC} \n"
 			fi
 		done
 	printf "${G}[=]${NC} All done.\n"
