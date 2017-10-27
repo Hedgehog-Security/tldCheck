@@ -79,7 +79,7 @@ checkTLDs() {
 				output=`dig www.$1.$i|grep www.$1.$i|grep -v ';'`
 				if [[ $pageOutput ]]; then
 					brandCheck=`curl -s www.$1.$i|grep "$brand"`
-					printf "\n${G}[-]${NC} - Checking for http data using www."
+					printf "${G}[-]${NC} - Checking for http data using www."
 					if [[ $brandCheck ]]; then
 						printf "							${O}[PRESENT]${NC}\n"
 						echo "www.$1.$i" >> $domain-$reviewlog
@@ -88,6 +88,7 @@ checkTLDs() {
 						echo "www.$1.$i" >> $domain-$brandhit
 					fi
                                         brandCheck=`curl -k -s https://www.$1.$i|grep "$brand"`
+					printf "${G}[-]${NC} - Checking for https data."
                                         if [[ $brandCheck ]]; then
                                                 printf "							${O}[PRESENT]${NC}\n"
                                                 echo "www.$1.$i" >> $domain-$reviewlog
