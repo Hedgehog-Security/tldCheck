@@ -1,5 +1,9 @@
 # tldCheck
+Author: Peter Bassill
+Version: 1.0
+Date: 10 October 2017
 
+---
 Usage tldCheck domainname "Brand Search Term"
 
 for example: ./tldCheck hedgehogsecurity "Hedgehog Security"
