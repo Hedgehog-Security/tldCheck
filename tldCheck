@@ -57,7 +57,7 @@ checkTLDs() {
 				pageOutput=`curl -s $1.$i|grep $1.$i` 
 				if [[ $pageOutput ]]; then
 					brandCheck=`curl -s $1.$i|grep "$brand"`
-					printf "\n${G}[-]${NC} - Checking for http data."
+					printf "${G}[-]${NC} - Checking for http data."
 					if [[ $brandCheck ]]; then
 						printf "						${O}[PRESENT]${NC}\n"
 						echo "$1.$i" >> $domain-$reviewlog
@@ -66,7 +66,7 @@ checkTLDs() {
 						echo "$1.$i" >> $domain-$brandhit
 					fi
                                         brandCheck=`curl -k -s https://$1.$i|grep "$brand"`
-					printf "\n${G}[-]${NC} - Checking for https data."
+					printf "${G}[-]${NC} - Checking for https data."
                                         if [[ $brandCheck ]]; then
                                                 printf "						${O}[PRESENT]${NC}\n"
                                                 echo "$1.$i" >> $domain-$reviewlog
